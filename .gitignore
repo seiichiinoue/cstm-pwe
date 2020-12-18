@@ -13,7 +13,7 @@
 
 # ignore 
 etc/*
-study/*
 corpus/*
+scripts/*
 # for debug
 cstm.dSYM/*
