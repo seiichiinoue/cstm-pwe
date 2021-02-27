@@ -717,6 +717,26 @@ int load_vector(string fname, vector<wstring> &vocab_list, vector<vector<double>
 }
 
 void normalize_vector(vector<vector<double>> &vec, double tau) {
+    vector<double> &tmp = vec[0];
+    int d = (int)tmp.size();
+    // calculate mean vector of word embeddings and execute centering
+    vector<double> mean_vec(d, 0);
+    for (int k=0; k<vec.size(); ++k) {
+        vector<double> &tar = vec[k];
+        for (int i=0; i<tar.size(); ++i) {
+            mean_vec[i] += tar[i];
+        }
+    }
+    for (int i=0; i<mean_vec.size(); ++i) {
+        mean_vec[i] /= (double)vec.size();
+    }
+    // for all vector
+    for (int k=0; k<vec.size(); ++k) {
+        vector<double> &tar = vec[k];
+        for (int i=0; i<tar.size(); ++i) {
+            tar[i] -= mean_vec[i];
+        }
+    }
     // calculate V^{-1} \sum_k (\phi(w_k)^T \phi(w_k))
     double Einner = 0;
     for (int k=0; k<vec.size(); ++k) {
