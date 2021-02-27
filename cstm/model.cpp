@@ -349,30 +349,6 @@ public:
     int get_sum_word_frequency_validation() {
         return std::accumulate(_sum_word_frequency_validation.begin(), _sum_word_frequency_validation.end(), 0);
     }
-    int get_actual_sum_word_frequency() {
-        int sum = 0;
-        for (int doc_id=0; doc_id<get_num_documents(); ++doc_id) {
-            for (id word_id=0; word_id<get_vocabulary_size(); ++word_id) {
-                int count = _cstm->get_word_count_in_doc(word_id, doc_id);
-                if (count <= _cstm->get_ignore_word_count()) {
-                    sum += count;
-                }
-            }
-        }
-        return get_sum_word_frequency() - sum;
-    }
-    int get_actual_sum_word_frequency_validation() {
-        int sum = 0;
-        for (int doc_id=0; doc_id<get_num_documents(); ++doc_id) {
-            for (id word_id=0; word_id<get_vocabulary_size(); ++word_id) {
-                int count = _cstm->get_word_count_in_validation_doc(word_id, doc_id);
-                if (count <= _cstm->get_ignore_word_count()) {
-                    sum += count;
-                }
-            }
-        }
-        return get_sum_word_frequency_validation() - sum;
-    }
     int get_num_word_vec_sampled() {
         return _num_word_vec_sampled;
     }
@@ -467,7 +443,7 @@ public:
             unordered_set<id> &word_ids = _word_ids_in_doc[doc_id];
             log_pw += _cstm->compute_log_probability_document_given_words(doc_id, word_ids);
         }
-        return cstm::exp(-log_pw / get_actual_sum_word_frequency());
+        return cstm::exp(-log_pw / get_sum_word_frequency());
     }
     // for validation dataset
     double compute_validation_perplexity() {
@@ -477,7 +453,7 @@ public:
             unordered_set<id> &word_ids = _word_ids_in_doc_validation[doc_id];
             log_pw += _cstm->compute_log_probability_validation_document_given_words(doc_id, word_ids);
         }
-        return cstm::exp(-log_pw / get_actual_sum_word_frequency_validation());
+        return cstm::exp(-log_pw / get_sum_word_frequency_validation());
     }
     void update_all_Zi() {
         for (int doc_id=0; doc_id<get_num_documents(); ++doc_id) {
