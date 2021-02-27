@@ -7,7 +7,7 @@ RUN apt update && apt install -y mecab && \
     apt install -y mecab-ipadic-utf8 && \
     apt install -y python3-pip
 
-RUN pip3 install mecab-python3 numpy matplotlib seaborn beautifulsoup4
+RUN pip3 install mecab-python3 numpy matplotlib seaborn beautifulsoup4 sklearn
 
 # language environment settings
 RUN apt-get -y install language-pack-ja-base language-pack-ja
