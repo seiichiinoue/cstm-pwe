@@ -122,7 +122,8 @@ namespace cstm {
             // document vectors
             for (int doc_id=0; doc_id<num_documents; ++ doc_id) {
                 // _doc_vectors[doc_id] = generate_vector();
-                _doc_vectors_in_semantic_space[doc_id] = generate_vector();
+                // _doc_vectors_in_semantic_space[doc_id] = generate_vector();
+                _doc_vectors_in_semantic_space[doc_id] = generate_scaled_vector();
                 _n_k[doc_id] = new int[vocabulary_size];
                 _n_k_validation[doc_id] = new int[vocabulary_size];
                 _Zi[doc_id] = 0;
