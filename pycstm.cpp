@@ -220,6 +220,14 @@ public:
         }
         return result;
     }
+    python::list get_words_in_documents(int doc_id) {
+        python::list ret;
+        unordered_set<id> &word_ids = _word_ids_in_doc[doc_id];
+        for (id word_id : word_ids) {
+            ret.append(word_id);
+        }
+        return ret;
+    }
     python::list get_doc_filenames() {
         python::list result;
         for (auto doc : _doc_filename_to_id) {
@@ -293,6 +301,7 @@ BOOST_PYTHON_MODULE(pycstm) {
     .def("get_semantic_low_prob_words_in_documents", &PyCSTM::get_semantic_low_prob_words_in_documents)
     .def("get_high_freq_words", &PyCSTM::get_high_freq_words)
     .def("get_words", &PyCSTM::get_words)
+    .def("get_words_in_documents", &PyCSTM::get_words_in_documents)
     .def("get_doc_filenames", &PyCSTM::get_doc_filenames)
     .def("get_docs_similar_to_file_in_semantic_space", &PyCSTM::get_docs_similar_to_file_in_semantic_space)
     .def("get_docs_similar_to_vector_in_semantic_space", &PyCSTM::get_docs_similar_to_vector_in_semantic_space)
