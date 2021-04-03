@@ -1,30 +1,35 @@
-# Continuous Space Topic Model with Word Embeddings
-
-## Description
-
-the implementation of Continuous Space Topic Model with Word Embeddings, which is the enhenced model of [CSTM](http://chasen.org/~daiti-m/paper/nl213cstm.pdf) by Daichi Mochihashi.
-
-## Environment
-
-- C++ 14+
-- clang++ 9.0
-- boost 1.71.0
-- glog 0.4.0
-- gflag 2.2.2
-- boost-python3
-- python3
+# Modeling Text Using the Continuous Space Topic Model with Pre-Trained Word Embeddings
 
 ## Usage
 
-- prepare document-based corpus and split it into train dataset and validation dataset
+- activate docker 
 
-- training ETM with MCMC.
-
-```bash
-$ make
-$ ./cstm -ndim_d=20 -ignore_word_count=4 -epoch=100 -num_threads=1 -data_path=./data/train/ -validation_data_path=./data/validation/ -model_path=./model/cstm.model
+```
+$ docker build -t myenv .
+$ docker run -it -v [local path]:/workspace/ myenv
+$ docker exec -it [container id] /bin/bash
 ```
 
-## Reference
+- compile
 
-- [Modeling Text through Gaussian Processes](http://chasen.org/~daiti-m/paper/nl213cstm.pdf)
+```bash
+$ make prepare
+$ make
+$ mkdir bin/
+$ mkdir data/ # data must be located at here.
+```
+
+
+- pre-train the word embeddings using CBOW model.
+
+```bash
+$ cd bin/ && ./word2vec -size 200 -size-s 100 -train ../data/data.txt -output ./vec.bin
+
+```
+
+- compile the CSTM and execute training.
+
+```bash
+$ cd bin/ && ./cstm -ndim_d=100 -ignore_word_count=4 -epoch=100 -num_threads=10 -data_path=../data/train/ -validation_data_path=../data/validation/ -vec_path=./vec.bin -model_path=./cstm.model > ../log/cstm.log
+```
+
